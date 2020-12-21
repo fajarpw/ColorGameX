@@ -56,7 +56,7 @@ public class MyActivity extends AppCompatActivity {
         isMinus = (Switch) findViewById(R.id.isMinus);
 
         initTimer();
-//        initColorList();
+        initColorList();
     }
 
     public void openGame(View v){
@@ -107,11 +107,13 @@ public class MyActivity extends AppCompatActivity {
         for (int i = 0; i < clrList.length; i++){
             charList.put(clrList[i],temp[i]);
         }
-        String clrTxt = ((TextView)findViewById(R.id.clrText)).getText().toString();
-        int lastNum = Arrays.asList(clrList).indexOf(clrTxt);
-        int colorIdx = getNewRandomInt(0,5,lastNum);
-        clrText.setText(clrList[colorIdx]);
-        countDown.start();
+        if(isStarted){
+            String clrTxt = ((TextView)findViewById(R.id.clrText)).getText().toString();
+            int lastNum = Arrays.asList(clrList).indexOf(clrTxt);
+            int colorIdx = getNewRandomInt(0,5,lastNum);
+            clrText.setText(clrList[colorIdx]);
+            countDown.start();
+        }
     }
 
     private void initTimer(){
@@ -125,7 +127,6 @@ public class MyActivity extends AppCompatActivity {
                         TimeUnit.MILLISECONDS.toMillis(millisUntilFinished) -
                                 TimeUnit.SECONDS.toMillis( TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished))));
             }
-
             @Override
             public void onFinish() {
                 wrongSubmit();
@@ -150,7 +151,7 @@ public class MyActivity extends AppCompatActivity {
     }
 
     private void wrongSubmit(){
-        if(isMinus.isChecked()&&progress.getProgress()>0){
+        if(isMinus.isChecked() && progress.getProgress()>0){
             updateScore(progress.getProgress() -
                     getResources().getInteger(R.integer.counter));
             newGameStage();
